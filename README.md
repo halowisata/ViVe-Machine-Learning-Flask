@@ -1,6 +1,6 @@
-
 ```
 Flask_Implementation
+├─ .gitignore
 ├─ app
 │  ├─ app.py
 │  ├─ config.py
@@ -8,6 +8,9 @@ Flask_Implementation
 │  │  ├─ collaborative_filtering
 │  │  │  ├─ prediction.py
 │  │  │  └─ training.py
+│  │  ├─ hybrid
+│  │  │  ├─ prediction.py
+│  │  │  └─ __init__.py
 │  │  ├─ knowledge_constraint
 │  │  │  └─ prediction.py
 │  │  ├─ preprocessing

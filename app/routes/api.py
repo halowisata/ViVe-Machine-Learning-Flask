@@ -15,12 +15,23 @@ from flask import Blueprint, jsonify
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 # Define API endpoints
-@api_bp.route('/users')
-def get_users():
-    users = [{'id': 1, 'name': 'John'}, {'id': 2, 'name': 'Jane'}]
-    return jsonify(users)
 
-@api_bp.route('/users/<int:user_id>')
-def get_user(user_id):
-    user = {'id': user_id, 'name': 'John'}
-    return jsonify(user)
+
+@api_bp.route('/recommendations')
+def recomment_recommendations():
+    return jsonify({
+        'recommendations': [
+            {
+                'id': 1,
+                'name': 'Recommendation 1',
+                'description': 'Recommendation 1 description',
+                'image_url': 'http://example.com/image1.jpg'
+            },
+            {
+                'id': 2,
+                'name': 'Recommendation 2',
+                'description': 'Recommendation 2 description',
+                'image_url': 'http://example.com/image2.jpg'
+            }
+        ]
+    })
