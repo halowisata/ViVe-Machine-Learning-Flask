@@ -56,7 +56,10 @@ def filter_by_budget(df, column_name, category):
 
 def filter_by_city(df, city):
     city = city.capitalize()
-    filtered_df = df[df["City"] == city]
+    if city == None or city == "Random":
+        filtered_df = df
+    else:
+        filtered_df = df[df["City"] == city]
     return filtered_df
 
 
