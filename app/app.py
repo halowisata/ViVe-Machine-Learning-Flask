@@ -1,5 +1,5 @@
 from flask import Flask
-from models.knowledge_constraint.prediction import knowledge_main as knowledge_constraint
+from models.hybrid.prediction import recommendation_place
 
 app = Flask(__name__)
 
@@ -11,9 +11,11 @@ def hello_world():  # put application's code here
 
 @app.route('/recommendation')
 def hello_test():  # put application's code here
-    test = knowledge_constraint()
-    print(test)
-    return 'Hello World!'
+    recommendation = recommendation_place()
+    return dict({
+        "success": True,
+        "data": recommendation.to_dict(orient='records')
+    })
 
 
 if __name__ == '__main__':
