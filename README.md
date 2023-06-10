@@ -1,5 +1,4 @@
 ```
-Flask_Implementation
 ├─ .gitignore
 ├─ app
 │  ├─ app.py
@@ -9,12 +8,10 @@ Flask_Implementation
 │  │  │  ├─ prediction.py
 │  │  │  └─ training.py
 │  │  ├─ hybrid
-│  │  │  ├─ prediction.py
-│  │  │  └─ __init__.py
+│  │  │  └─ prediction.py
+│  │  ├─ imports.py
 │  │  ├─ knowledge_constraint
 │  │  │  └─ prediction.py
-│  │  ├─ preprocessing
-│  │  │  └─ preprocessing.py
 │  │  └─ __init__.py
 │  ├─ routes
 │  │  ├─ api.py
@@ -28,11 +25,10 @@ Flask_Implementation
 │  │  └─ recommender_output
 │  │     ├─ cf_recommendation.csv
 │  │     └─ knowledge_recommendation.csv
-│  ├─ processed
-│  │  └─ tourism_with_id_updated.csv
 │  └─ raw
 │     ├─ tourism_rating.csv
 │     ├─ tourism_with_id.csv
+│     ├─ tourism_with_id_updated.csv
 │     └─ user.csv
 ├─ notebooks
 │  ├─ preprocessing
@@ -45,5 +41,4 @@ Flask_Implementation
 ├─ README.md
 ├─ requirements.txt
 └─ run.py
-
 ```
