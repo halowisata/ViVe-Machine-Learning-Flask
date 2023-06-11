@@ -9,14 +9,21 @@ def recommendation_place(user_id, mood_input, budget_input, city_input):
     final_result = place.copy()
     result_constraints_recommender = knowledge_main(
         mood_input, budget_input, city_input)
-    result_cf_recommender = cf_main()
-    final_result = pd.merge(final_result, result_constraints_recommender[['Place_Id', 'score']], on='Place_Id',
-                            how='left')
-    final_result.rename(columns={'score': 'score_1'}, inplace=True)
 
-    final_result = pd.merge(final_result, result_cf_recommender[[
-                            'Place_Id', 'score']], on='Place_Id', how='left')
-    final_result.rename(columns={'score': 'score_2'}, inplace=True)
+    if result_constraints_recommender is not None:
+        final_result = pd.merge(final_result, result_constraints_recommender[['Place_Id', 'score']], on='Place_Id',
+                                how='left')
+        final_result.rename(columns={'score': 'score_1'}, inplace=True)
+    else:
+        final_result['score_1'] = None
+
+    result_cf_recommender = cf_main(user_id)
+    if result_cf_recommender is not None:
+        final_result = pd.merge(final_result, result_cf_recommender[[
+            'Place_Id', 'score']], on='Place_Id', how='left')
+        final_result.rename(columns={'score': 'score_2'}, inplace=True)
+    else:
+        final_result['score_2'] = None
 
     final_result['score_sum'] = final_result['score_1'].fillna(
         0) + final_result['score_2'].fillna(0)

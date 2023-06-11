@@ -1,0 +1,1 @@
+print(user_place_array)

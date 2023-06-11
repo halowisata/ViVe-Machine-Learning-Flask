@@ -92,7 +92,6 @@ class RecommenderNet(tf.keras.Model):
 
 class myCallback(Callback):
     def on_epoch_end(self, epoch, logs=None):
-        print("Checking val_root_mean_squared_error at end of epoch...")
         if logs['val_root_mean_squared_error'] <= 0.25:
             self.model.stop_training = True
 
@@ -124,14 +123,13 @@ def give_scoring(df):
     return df
 
 
-def prediction(place_encoded_to_place, model):
+def prediction(user_to_user_encoded, place_encoded_to_place, model, user_id):
     place_df = update[['Place_Id', 'Place_Name',
                        'new_category', 'Rating', 'Price']]
     place_df.columns = ['id', 'place_name', 'category', 'rating', 'price']
     df = rat.copy()
-    print(df.dtypes)
 
-    user_id = df.User_Id.sample(1).iloc[0]  # TODO change
+
     place_visited_by_user = df[df.User_Id == user_id]
 
     # Membuat data lokasi yang belum dikunjungi user
@@ -143,12 +141,19 @@ def prediction(place_encoded_to_place, model):
 
     place_not_rated = [
         [place_to_place_encoded.get(x)] for x in place_not_rated]
-    user_encoder = user_to_user_encoded.get(user_id)
-    user_place_array = np.hstack(
-        ([[user_encoder]] * len(place_not_rated), place_not_rated)
-    )
 
-    ratings = model.predict(user_place_array).flatten()
+    user_encoder = user_to_user_encoded.get(int(user_id))
+    if user_encoder is not None:
+        user_place_array = np.hstack(
+            ([[user_encoder]] * len(place_not_rated), place_not_rated)
+        )
+    else:
+        return
+
+    if user_place_array is not None:
+        ratings = model.predict(user_place_array).flatten()
+    else:
+        ratings = None
     top_ratings_indices = ratings.argsort()[-5:][::-1]
     recommended_place_ids = [
         place_encoded_to_place.get(place_not_rated[x][0]) for x in top_ratings_indices
@@ -164,7 +169,7 @@ def prediction(place_encoded_to_place, model):
     return cf_recommendation
 
 
-def cf_main():
+def cf_main(user_id):
     # Check if the model weights file exists
     try:
         with open("model_weights.h5"):
@@ -173,20 +178,25 @@ def cf_main():
         model_weights_exist = False
 
     if model_weights_exist:
-        print("ada weight")
+
         # If model weights exist, load them and perform prediction
         model = RecommenderNet(num_users, num_places, 50)
-        _ = model.predict(np.zeros((1, 2)))  
+        _ = model.predict(np.zeros((1, 2)))
         model.load_weights("model_weights.h5")
-        recommendation = prediction(place_encoded_to_place, model)
+        recommendation = prediction(
+            user_to_user_encoded, place_encoded_to_place, model, user_id)
     else:
         # If model weights don't exist, perform training and then prediction
-        print("tidak ada weight")
+
         training(num_users, num_places, x_train, y_train, x_test, y_test)
         model = RecommenderNet(num_users, num_places, 50)
-        _ = model.predict(np.zeros((1, 2)))  
+        _ = model.predict(np.zeros((1, 2)))
         model.load_weights("model_weights.h5")
-        recommendation = prediction(place_encoded_to_place, model)
+        recommendation = prediction(
+            user_to_user_encoded, place_encoded_to_place, model, user_id)
+
+    if recommendation is None:
+        return None
 
     recommendation = give_scoring(recommendation)
 
