@@ -1,19 +1,19 @@
-FROM python:3.7-slim
+FROM python:3.9
 
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y ...
+
+# Install the compatible version of tensorflow-intel
+RUN pip install tensorflow-intel==2.12.0
+
+# Copy your application code
+COPY . /app
+
+# Set the working directory
 WORKDIR /app
 
-RUN pip install --upgrade pip
-
-COPY requirements.txt .
-
+# Install additional requirements, if any
 RUN pip install -r requirements.txt
 
-COPY . .
-
-EXPOSE 5000
-
-ENV FLASK_ENV=production
-
-ENV FLASK_APP=app.py
-
-CMD ["python", "./app/app.py"]
+# Set the command to run your application
+CMD [ "python", "./app/app.py" ]
