@@ -28,4 +28,5 @@ def recommendation_place(user_id, mood_input, budget_input, city_input):
     final_result['score_sum'] = final_result['score_1'].fillna(
         0) + final_result['score_2'].fillna(0)
     final_result.sort_values("score_sum", ascending=False, inplace=True)
+    final_result = final_result.head(6)
     return final_result
