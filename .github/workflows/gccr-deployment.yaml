@@ -1,0 +1,38 @@
+name: Google Cloud Cloud Run Deployment
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    name: Deploy to Google Cloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: python -m pip install --upgrade pip
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/setup-gcloud@v0.5.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Build to Cloud Build and Push to Artifact Registry
+        run: |
+          gcloud config set project ${{ secrets.GCP_PROJECT }}
+          gcloud builds submit --config cloudbuild.yaml .
+
+      - name: Deploy to Cloud Run
+        id: deploy_cloud_run
+        uses: google-github-actions/deploy-cloudrun@v0.3.0
+        with:
+          service: model
+          region: asia-southeast2
+          image: asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/vive-app/model
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
