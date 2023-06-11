@@ -86,12 +86,12 @@ def give_scoring(df):
     return df
 
 
-def knowledge_main():
+def knowledge_main(mood_input, budget_input, city_input):
     path = "./datasets/raw/tourism_with_id_updated.csv"
     df = read_csv(path)
     df = drop_columns(df, ["Description", "Time_Minutes", "Coordinate"])
     knowledge_recommendation = knowledge_recommender(
-        df, 'Tenang', 'High', "Bandung")
+        df, mood_input, budget_input, city_input)
     knowledge_recommendation.sort_values(
         "Rating", ascending=False, inplace=True)
     knowledge_recommendation = drop_columns(knowledge_recommendation, [

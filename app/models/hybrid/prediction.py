@@ -4,10 +4,11 @@ from models.knowledge_constraint.prediction import knowledge_main
 from models.collaborative_filtering.prediction import cf_main
 
 
-def recommendation_place():
+def recommendation_place(user_id, mood_input, budget_input, city_input):
     place = pd.read_csv("./datasets/raw/tourism_with_id_updated.csv")
     final_result = place.copy()
-    result_constraints_recommender = knowledge_main()
+    result_constraints_recommender = knowledge_main(
+        mood_input, budget_input, city_input)
     result_cf_recommender = cf_main()
     final_result = pd.merge(final_result, result_constraints_recommender[['Place_Id', 'score']], on='Place_Id',
                             how='left')

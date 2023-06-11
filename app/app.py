@@ -18,9 +18,11 @@ def hello_test():  # put application's code here
     budget_input = args.get('budget')
     city_input = args.get('city')
 
-    
+    print(city_input)
 
-    recommendation = recommendation_place()
+
+
+    recommendation = recommendation_place(user_id, mood_input, budget_input, city_input)
     return dict({
         "success": True,
         "data": recommendation.to_dict(orient='records')
