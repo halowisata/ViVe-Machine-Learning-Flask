@@ -28,5 +28,6 @@ def create_user_main(address, age):
     user['User_Id'] = last_id+1
     user['address'] = address
     user['age'] = age
+    append_user_to_csv(filename, user['User_Id'], address, user['age'])
 
     return user
