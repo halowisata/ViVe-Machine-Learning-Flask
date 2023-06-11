@@ -25,10 +25,6 @@ jobs:
 
       - name: Build to Cloud Build and Push to Artifact Registry
         run: |
-          apt-get clean && \
-          apt-get update && \
-          apt-get remove -y zephyr-server-krb5 && \
-          apt-get install -y zephyr-server
           gcloud config set project ${{ secrets.GCP_PROJECT }}
           gcloud builds submit --config cloudbuild.yaml .
 
