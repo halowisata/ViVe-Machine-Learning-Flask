@@ -129,7 +129,6 @@ def prediction(user_to_user_encoded, place_encoded_to_place, model, user_id):
     place_df.columns = ['id', 'place_name', 'category', 'rating', 'price']
     df = rat.copy()
 
-
     place_visited_by_user = df[df.User_Id == user_id]
 
     # Membuat data lokasi yang belum dikunjungi user
