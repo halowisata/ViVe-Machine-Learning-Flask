@@ -1,10 +1,18 @@
-FROM python:3.9
+FROM python:3.9-slim
 
-# Copy your application code
-COPY . /app
-
-# Set the working directory
 WORKDIR /app
 
-# Set the command to run your application
-CMD [ "python", "./app/app.py" ]
+RUN pip install --upgrade pip
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip && \
+    pip install virtualenv && \
+    virtualenv /venv && \
+    /venv/bin/pip install -r requirements.txt
+
+COPY . .
+
+ENTRYPOINT ["/venv/bin/python", "app.py"]
+
+CMD ["python", "app.py"]
