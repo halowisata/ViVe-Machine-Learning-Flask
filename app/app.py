@@ -1,6 +1,8 @@
 from flask import Flask, request
 from models.hybrid.prediction import recommendation_place
 from utils.create_user_handler import create_user_main
+from config import config
+from waitress import serve
 app = Flask(__name__)
 
 
@@ -48,4 +50,4 @@ def create_user():
 
 
 if __name__ == '__main__':
-    app.run()
+    serve(app, host="0.0.0.0", port=8080)

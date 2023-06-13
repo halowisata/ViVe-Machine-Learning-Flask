@@ -10,6 +10,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 8080
+
+RUN FLASK_ENV=production
 
 CMD ["python", "app/app.py"]
