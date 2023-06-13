@@ -1,9 +1,30 @@
 from flask import Flask, request
 from models.hybrid.prediction import recommendation_place
 from utils.create_user_handler import create_user_main
+from models.collaborative_filtering.prediction import training
 from config import config
 from waitress import serve
+from flask_apscheduler import APScheduler
+
+
+class Config:
+    SCHEDULER_API_ENABLED = True
+
+
 app = Flask(__name__)
+app.config.from_object(Config)
+
+# intialize scheduler
+scheduler = APScheduler()
+scheduler.init_app(app)
+
+
+@scheduler.task('cron', id='re-train', hour=1)
+def train():
+    training()
+
+
+scheduler.start()
 
 
 @app.route('/')
