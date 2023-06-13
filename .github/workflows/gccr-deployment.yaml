@@ -3,7 +3,7 @@ name: Google Cloud Cloud Run Deployment
 on:
   push:
     branches:
-      - development
+      - main
 
 jobs:
   deploy:

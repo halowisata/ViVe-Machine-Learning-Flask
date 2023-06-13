@@ -12,6 +12,4 @@ COPY . .
 
 EXPOSE 8080
 
-RUN FLASK_ENV=production
-
 CMD ["python", "app/app.py"]
