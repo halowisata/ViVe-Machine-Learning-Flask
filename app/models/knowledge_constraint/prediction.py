@@ -24,9 +24,9 @@ def drop_columns(df, column_names):
 def mood_constraint(mood):
     mood = mood.capitalize()
     preferences = []
-    if mood == "Happy" or mood == "Sad":
+    if mood == "Happy" or mood == "Sad" or mood == "Senang" or mood == "Sedih":
         preferences = ["Petualangan", "Keluarga", "Romantis", "Budaya"]
-    elif mood == "Calm" or mood == "Angry":
+    elif mood == "Calm" or mood == "Angry" or mood == "Tenang" or mood == "Marah":
         preferences = ["Alam", "Hiburan", "Olahraga", "Relaksasi"]
 
     return preferences
