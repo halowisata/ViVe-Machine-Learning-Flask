@@ -38,15 +38,15 @@ def filter_by_budget(df, column_name, category):
     q2 = quartiles[0.5]
     q3 = quartiles[0.75]
 
-    if category == "Low":
+    if category == "Low" or category == "Rendah":
         filtered_df = df[df[column_name] <= q1]
-    elif category == "Medium":
+    elif category == "Medium" or category == "Sedang":
         filtered_df = df[(df[column_name] > q1) & (df[column_name] <= q2)]
-    elif category == "High":
+    elif category == "High" or category == "Tinggi":
         filtered_df = df[
             ((df[column_name] > q2) & (df[column_name] <= q3)) | (df[column_name] > q3)
         ]
-    elif category == "Random" or category == None:
+    elif category == "Surprise me!" or category == None or category == "Kejutkan saya!":
         filtered_df = df
     else:
         filtered_df = df
@@ -57,7 +57,7 @@ def filter_by_budget(df, column_name, category):
 def filter_by_city(df, city):
     cities = df["City"].unique()
     city = city.capitalize()
-    if city == None or city == "Random":
+    if city == None or city == "Surprise me!" or city == "Kejutkan saya!":
         filtered_df = df
     elif city in cities:
         filtered_df = df[df["City"] == city]
