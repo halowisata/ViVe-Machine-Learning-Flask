@@ -11,12 +11,12 @@ def drop_columns(df, column_names):
     existing_columns = df.columns
 
     # Filter the column names that exist in the DataFrame
-    valid_column_names = [
-        col for col in column_names if col in existing_columns]
+    valid_column_names = [col for col in column_names if col in existing_columns]
 
     # Drop the valid column names
     df = df.drop(valid_column_names, axis=1)
     return df
+
 
 # knowledge based on paper
 
@@ -24,9 +24,9 @@ def drop_columns(df, column_names):
 def mood_constraint(mood):
     mood = mood.capitalize()
     preferences = []
-    if mood == "Senang" or mood == "Sedih":
+    if mood == "Happy" or mood == "Sad":
         preferences = ["Petualangan", "Keluarga", "Romantis", "Budaya"]
-    elif mood == "Tenang" or mood == "Marah":
+    elif mood == "Calm" or mood == "Angry":
         preferences = ["Alam", "Hiburan", "Olahraga", "Relaksasi"]
 
     return preferences
@@ -44,8 +44,9 @@ def filter_by_budget(df, column_name, category):
     elif category == "Medium":
         filtered_df = df[(df[column_name] > q1) & (df[column_name] <= q2)]
     elif category == "High":
-        filtered_df = df[((df[column_name] > q2) & (
-            df[column_name] <= q3)) | (df[column_name] > q3)]
+        filtered_df = df[
+            ((df[column_name] > q2) & (df[column_name] <= q3)) | (df[column_name] > q3)
+        ]
     elif category == "Random":
         filtered_df = df
     else:
@@ -75,14 +76,17 @@ def knowledge_recommender(df, mood, budget, city):
     filtered_df = filter_by_city(filtered_df, city)
 
     # print(filtered_df)
-    recommended_destinations = filtered_df[filtered_df["new_category"].apply(
-        lambda x: any(preference in x for preference in mood_preferences))]
+    recommended_destinations = filtered_df[
+        filtered_df["new_category"].apply(
+            lambda x: any(preference in x for preference in mood_preferences)
+        )
+    ]
     return recommended_destinations
 
 
 def give_scoring(df):
     # this function will return score for each user recommended items
-    df['score'] = 1
+    df["score"] = 1
     return df
 
 
@@ -91,10 +95,12 @@ def knowledge_main(mood_input, budget_input, city_input):
     df = read_csv(path)
     df = drop_columns(df, ["Description", "Time_Minutes", "Coordinate"])
     knowledge_recommendation = knowledge_recommender(
-        df, mood_input, budget_input, city_input)
-    knowledge_recommendation.sort_values(
-        "Rating", ascending=False, inplace=True)
-    knowledge_recommendation = drop_columns(knowledge_recommendation, [
-                                            "Place_Name", "City", "Price", "Lat", "Long", "new_category", "Rating"])
+        df, mood_input, budget_input, city_input
+    )
+    knowledge_recommendation.sort_values("Rating", ascending=False, inplace=True)
+    knowledge_recommendation = drop_columns(
+        knowledge_recommendation,
+        ["Place_Name", "City", "Price", "Lat", "Long", "new_category", "Rating"],
+    )
     knowledge_recommendation = give_scoring(knowledge_recommendation)
     return knowledge_recommendation
