@@ -28,7 +28,6 @@ def mood_constraint(mood):
         preferences = ["Petualangan", "Keluarga", "Romantis", "Budaya"]
     elif mood == "Calm" or mood == "Angry" or mood == "Tenang" or mood == "Marah":
         preferences = ["Alam", "Hiburan", "Olahraga", "Relaksasi"]
-
     return preferences
 
 
@@ -47,20 +46,24 @@ def filter_by_budget(df, column_name, category):
         filtered_df = df[
             ((df[column_name] > q2) & (df[column_name] <= q3)) | (df[column_name] > q3)
         ]
-    elif category == "Random":
+    elif category == "Random" or category == None:
         filtered_df = df
     else:
-        filtered_df = []
+        filtered_df = df
 
     return filtered_df
 
 
 def filter_by_city(df, city):
+    cities = df["City"].unique()
     city = city.capitalize()
     if city == None or city == "Random":
         filtered_df = df
-    else:
+    elif city in cities:
         filtered_df = df[df["City"] == city]
+    else:
+        filtered_df = df
+
     return filtered_df
 
 
