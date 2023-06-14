@@ -11,7 +11,6 @@ class Config:
     SCHEDULER_API_ENABLED = True
 
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -20,7 +19,8 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 
 
-@scheduler.task('cron', id='re-train', hour=1)
+# this will schedule every 1 AM to retrain the model
+@scheduler.task("cron", id="re-train", hour=1)
 def train():
     training()
 
@@ -68,4 +68,3 @@ def create_user():
 
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8080)
-
